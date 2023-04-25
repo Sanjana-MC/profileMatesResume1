@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
+        integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="Assets/css/index.css">
+</head>
+
+<body>
+    <script>
+        window.addEventListener('load',fetchdata);
+
+        async function fetchdata() {
+            let headersList = {
+            "Accept": "/",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+            "Content-Type": "application/json"
+        }
+
+        let bodyContent = JSON.stringify(
+            {
+                "userId": "6447f13483fe0a158be28e03"
+              
+            });
+
+        let response = await fetch("http://localhost:3000/user/getDetails", {
+            method: "POST",
+            body: bodyContent,
+            headers: headersList
+        });
+
+        let data = await response.text();
+        console.log(data);
+        let parsedData = JSON.parse(data);
+        document.getElementById("uname").innerHTML=parsedData.name;
+        document.getElementById("contact").innerHTML=parsedData.phone;
+        document.getElementById("email").innerHTML=parsedData.email;
+        document.getElementById("linkdin").innerHTML=parsedData.linkedIn;
+
+        //languages
+        const unlist=document.getElementById('ul');
+        const language = Object.values(parsedData.languages_known); 
+        language.forEach((printlang)=> {
+        const list=document.createElement("li");
+                var text=document.createTextNode(printlang);
+                list.appendChild(text);
+                unlist.appendChild(list);
+        })
+
+        //skills
+        var node= node=document.getElementById('skills');
+        const skills = Object.values(parsedData.skills); 
+        skills.forEach((skill)=> {
+                var list=document.createElement("li");
+                var text=document.createTextNode(skill+"\n");
+                list.appendChild(text);
+                node.appendChild(list);            
+        });
+
+        //education
+       // var node=document.getElementById('education');
+        for (const [key, value] of Object.entries(parsedData.education)) {
+                const institutionName = value.Institution_name;
+                const yearOfPass = value.Year_of_pass;
+                const score = value.Score;
+
+                const unlist = document.getElementById("education");
+
+                const list=document.createElement("li");
+
+                const tkey=document.createElement("h5");
+                const textkey = document.createTextNode(`${key}`);
+                tkey.appendChild(textkey);
+
+                const tcollege=document.createElement("h4");
+                const textcollege = document.createTextNode(`${institutionName}`);
+                tcollege.appendChild(textcollege);
+
+                const tyear=document.createElement("h4");
+                const textyear = document.createTextNode(`${yearOfPass}`);
+                tyear.appendChild(textyear);
+                
+
+                const tscore=document.createElement("h4");
+                const textscore = document.createTextNode(`${score}`);       
+                tscore.appendChild(textscore);
+
+                list.appendChild(tkey);
+                list.appendChild(tcollege);
+                list.appendChild(tyear);
+                list.appendChild(tscore);     
+                
+                unlist.appendChild(list);
+        }
+
+        //image
+        document.getElementById('image').src=parsedData.image;
+        
+    } 
+    
+    </script>
+    <div class="container">
+        <div class="leftSide">
+            <div class="profileText">
+                <div class="imgBx">
+                    <img id="image" src="" alt="image">
+                </div>
+                <h2 id="uname" name="uname"></h2>
+            </div>
+
+            <div class="contactInfo">
+                <h3 class="title">Contact Info</h3>
+                <ul>
+                    <li>
+                        <span class="icon"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                        <span class="text" id="contact"></span>
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fa fa-envelope-o" aria-hidden="true"></i></span>
+                        <span class="text" id="email"></span>
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+                        <span class="text">www.mywebsite.com</span>
+                    </li>
+                    <li>
+                        <span class="icon"><i class="fa fa-linkedin" aria-hidden="true"></i></span>
+                        <span class="text" id="linkdin"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="contactInfo education">
+                <h3 class="title">Education</h3>
+                <ul id="education">
+
+                </ul>
+            </div>
+
+            <!-- <div class="contactInfo language">
+                <h3 class="title">Languages</h3>
+                <ul id="ul">               
+                </ul>
+            </div> -->
+        </div>
+
+
+        <div class="rightSide">
+            <div class="about">
+                <h2 class="title2">Profile</h2>
+                <p>Recent graduate with a degree in [Technical field] and strong problem-solving skills. Possesses a deep understanding of 
+                all the skills, including proficiency in programming languages and technologies.<br><br> Skilled in collaborating with cross-functional teams to drive projects from concept to completion. Able to adapt to new technologies quickly and committed to continuously expanding technical knowledge. Passionate about creating innovative solutions 
+                    that meet user needs and exceed expectations
+                   
+                </p>
+            </div>
+
+            <div class="about skills">
+                <h2 class="title2">Professional Skills</h2>
+                <div id="skills" class="box">
+                </div>
+            </div>
+
+            <div class="about intrest">
+                <h2 class="title2">Interest</h2>
+                <ul>
+                    <li><i class="fa fa-gamepad" aria-hidden="true"></i> Gaming</li>
+                    <li><i class="fa fa-microphone" aria-hidden="true"></i> Singing</li>
+                    <li><i class="fa fa-book" aria-hidden="true"></i> Reading</li>
+                    <li><i class="fa fa-cutlery" aria-hidden="true"></i> Cooking</li>
+                </ul>
+            </div>
+
+            <div class="about intrest">
+                <h2 class="title2">Languages</h2>
+                <ul id="ul">               
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
